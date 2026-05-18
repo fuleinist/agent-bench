@@ -31,7 +31,8 @@ def cli():
 @click.option("--filter", "category", default=None, help="Filter by category")
 @click.option("--agent", default="generic", help="Agent to use (default: generic)")
 @click.option("--timeout", default=None, type=int, help="Timeout per task in seconds")
-def run(task_id: str, run_all: bool, category: str, agent: str, timeout: int):
+@click.option("--verbose", "verbose", is_flag=True, help="Show detailed task output (stdout/stderr)")
+def run(task_id: str, run_all: bool, category: str, agent: str, timeout: int, verbose: bool):
     """Run benchmark tasks."""
     runner = Runner()
     store = Store()
@@ -80,8 +81,12 @@ def run(task_id: str, run_all: bool, category: str, agent: str, timeout: int):
             passed += 1
         else:
             click.echo(f" {click.style(result.status.value.upper(), fg='red')}")
-            if result.error:
-                click.echo(f"    Error: {result.error}")
+            if verbose and result.stdout:
+                click.echo(f"    stdout: {result.stdout[:500]}")
+            if verbose and result.stderr:
+                click.echo(f"    stderr: {result.stderr[:500]}")
+            if verbose and result.error:
+                click.echo(f"    error: {result.error}")
             failed += 1
 
     # Update run summary
