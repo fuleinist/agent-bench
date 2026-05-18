@@ -1,0 +1,46 @@
+id: write_docs
+name: Write Module Documentation
+description: Write comprehensive docstrings and README for a data processor
+category: documentation
+difficulty: easy
+
+setup: |
+  echo "import json" > data_processor.py
+  echo "import csv" >> data_processor.py
+  echo "from pathlib import Path" >> data_processor.py
+  echo "" >> data_processor.py
+  echo "class DataProcessor:" >> data_processor.py
+  echo "    def __init__(self, format='json'):" >> data_processor.py
+  echo "        self.format = format" >> data_processor.py
+  echo "        " >> data_processor.py
+  echo "    def load(self, filepath):" >> data_processor.py
+  echo "        path = Path(filepath)" >> data_processor.py
+  echo "        if path.suffix == '.json':" >> data_processor.py
+  echo "            with open(filepath) as f:" >> data_processor.py
+  echo "                return json.load(f)" >> data_processor.py
+  echo "        elif path.suffix == '.csv':" >> data_processor.py
+  echo "            with open(filepath) as f:" >> data_processor.py
+  echo "                return list(csv.DictReader(f))" >> data_processor.py
+  echo "        else:" >> data_processor.py
+  echo "            raise ValueError(f'Unsupported format: {path.suffix}')" >> data_processor.py
+  echo "    " >> data_processor.py
+  echo "    def save(self, filepath, data):" >> data_processor.py
+  echo "        path = Path(filepath)" >> data_processor.py
+  echo "        if path.suffix == '.json':" >> data_processor.py
+  echo "            with open(filepath, 'w') as f:" >> data_processor.py
+  echo "                json.dump(data, f, indent=2)" >> data_processor.py
+  echo "        elif path.suffix == '.csv':" >> data_processor.py
+  echo "            if isinstance(data, list) and data:" >> data_processor.py
+  echo "                with open(filepath, 'w', newline='') as f:" >> data_processor.py
+  echo "                    writer = csv.DictWriter(f, fieldnames=data[0].keys())" >> data_processor.py
+  echo "                    writer.writeheader()" >> data_processor.py
+  echo "                    writer.writerows(data)" >> data_processor.py
+  echo "        else:" >> data_processor.py
+  echo "            raise ValueError(f'Unsupported format: {path.suffix}')" >> data_processor.py
+
+task_prompt: Add comprehensive docstrings to the DataProcessor class in data_processor.py. Document the class purpose, __init__ params, load and save methods with parameters and return types. Then create a README.md with overview, usage examples, and API reference.
+
+test_command: python -c "from data_processor import DataProcessor; p = DataProcessor(); print('Has class docstring' if p.__class__.__doc__ else 'No docstring')"
+expected_outputs:
+  - Has class docstring
+timeout: 90

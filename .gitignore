@@ -1,0 +1,7 @@
+results.db
+dashboard.html
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/

@@ -1,0 +1,25 @@
+id: optimize_sql
+name: Optimize Slow SQL Query
+description: Optimize a slow SQL query with proper indexes
+category: performance
+difficulty: hard
+
+setup: |
+  echo "-- Create optimized version with indexes" > slow_query_optimized.sql
+  echo "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, created_at TIMESTAMP);" >> slow_query_optimized.sql
+  echo "CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY, user_id INTEGER, total REAL, status TEXT, created_at TIMESTAMP);" >> slow_query_optimized.sql
+  echo "CREATE TABLE IF NOT EXISTS order_items (id INTEGER PRIMARY KEY, order_id INTEGER, product_id INTEGER, quantity INTEGER, price REAL);" >> slow_query_optimized.sql
+  echo "" >> slow_query_optimized.sql
+  echo "-- Add indexes for performance" >> slow_query_optimized.sql
+  echo "CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);" >> slow_query_optimized.sql
+  echo "CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);" >> slow_query_optimized.sql
+  echo "CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at);" >> slow_query_optimized.sql
+  echo "CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);" >> slow_query_optimized.sql
+  echo "CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(created_at);" >> slow_query_optimized.sql
+
+task_prompt: Update slow_query_optimized.sql with an optimized version of the query that joins users, orders, and order_items tables to get user spending. The optimized query should use the indexes defined in the setup and be more efficient than a naive join.
+
+test_command: sqlite3 test.db < slow_query_optimized.sql && python -c "import sqlite3; conn = sqlite3.connect('test.db'); cur = conn.execute(\"SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='orders'\"); print('Indexes:', [r[0] for r in cur.fetchall()])"
+expected_outputs:
+  - idx_orders_user_id
+timeout: 180

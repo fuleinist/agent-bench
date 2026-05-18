@@ -1,0 +1,27 @@
+# Agent Configurations for Agent-Bench
+# Add your agent installations here
+
+agents:
+  claude-code:
+    type: claude_code
+    command: claude
+    available: false  # Set to true if Claude Code is installed
+    notes: "Check with: claude --version"
+
+  codex:
+    type: command
+    command: codex
+    available: false
+    notes: "OpenAI Codex CLI"
+
+  generic:
+    type: command
+    command: ""  # Override with your agent's CLI command
+    available: true
+    notes: "Custom agent - set command above"
+
+# Default timeout per task in seconds
+default_timeout: 300
+
+# Maximum retries on failure
+max_retries: 1

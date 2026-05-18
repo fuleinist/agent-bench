@@ -1,0 +1,21 @@
+id: add_tests
+name: Add Unit Tests
+description: Write unit tests for a simple calculator module
+category: testing
+difficulty: easy
+
+setup: |
+  echo "def add(a, b): return a + b" > calculator.py
+  echo "def subtract(a, b): return a - b" >> calculator.py
+  echo "def multiply(a, b): return a * b" >> calculator.py
+  echo "def divide(a, b):" >> calculator.py
+  echo "    if b == 0:" >> calculator.py
+  echo "        raise ValueError('Division by zero')" >> calculator.py
+  echo "    return a / b" >> calculator.py
+
+task_prompt: Write unit tests for calculator.py using pytest. Test all four operations (add, subtract, multiply, divide) and edge cases including division by zero.
+
+test_command: python -c "import calculator; print('calculator loaded')"
+expected_outputs:
+  - calculator loaded
+timeout: 60

@@ -1,0 +1,20 @@
+id: refactor_yaml
+name: Convert Config to YAML
+description: Refactor hardcoded config into a YAML file with a loader
+category: refactoring
+difficulty: medium
+
+setup: |
+  echo "DATABASE_HOST = localhost" > config.py
+  echo "DATABASE_PORT = 5432" >> config.py
+  echo "DATABASE_NAME = myapp" >> config.py
+  echo "API_KEY = abc123xyz" >> config.py
+  echo "API_URL = https://api.example.com" >> config.py
+  echo "API_TIMEOUT = 30" >> config.py
+
+task_prompt: Move config.py values to config.yaml. Create config_loader.py that reads config.yaml and exports DATABASE_HOST, DATABASE_PORT, DATABASE_NAME, API_KEY, API_URL, API_TIMEOUT as constants.
+
+test_command: python -c "from config_loader import DATABASE_HOST, API_KEY; print('DB:', DATABASE_HOST)"
+expected_outputs:
+  - DB: localhost
+timeout: 120

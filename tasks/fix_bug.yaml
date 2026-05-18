@@ -1,0 +1,26 @@
+id: fix_bug
+name: Fix Bug in Email Validator
+description: Fix a bug in user_validator.py that accepts invalid emails
+category: debugging
+difficulty: medium
+
+setup: |
+  echo "def validate_email(email):" > user_validator.py
+  echo "    return '@' in email" >> user_validator.py
+  echo "" >> user_validator.py
+  echo "def validate_username(username):" >> user_validator.py
+  echo "    if len(username) < 3:" >> user_validator.py
+  echo "        return False" >> user_validator.py
+  echo "    if not username.isalnum():" >> user_validator.py
+  echo "        return False" >> user_validator.py
+  echo "    return True" >> user_validator.py
+  echo "" >> user_validator.py
+  echo "def validate_user(email, username):" >> user_validator.py
+  echo "    return validate_email(email) and validate_username(username)" >> user_validator.py
+
+task_prompt: Fix the validate_email function in user_validator.py. It should reject emails like "invalid", "test@", and "@test.com". Only accept proper email format like "user@example.com". Use regex or proper validation.
+
+test_command: python -c "from user_validator import validate_email; assert not validate_email('invalid'); assert not validate_email('test@'); assert not validate_email('@test.com'); assert validate_email('user@test.com'); print('All tests passed!')"
+expected_outputs:
+  - All tests passed
+timeout: 120
